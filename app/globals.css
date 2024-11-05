@@ -3,19 +3,73 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  background-image: url('/images/bg.jpg');
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
+.dropdown-content {
+  display: none;
+}
+.dropdown-content.active {
+  display: block;
+}
+
+
+.mySlides {display: none;}
+    img {vertical-align: middle;}
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      margin-top: -22px;
+      padding: 16px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+      user-select: none;
+      background-color: rgba(0, 127, 255, 0.5);
+    }
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+        background-color: rgba(0, 0, 139, 0.5);
+    }
+    .text {
+      color: #f2f2f2;
+      font-size: 15px;
+      position: absolute;
+      bottom: 50%; /* Centré verticalement */
+      right: 4px; /* Aligné à droite */
+      transform: translateY(50%); /* Ajustement pour centrer verticalement */
+      text-align: right; /* Texte aligné à droite */
+      width: 85%; /* Largeur du texte */
+    }
+
+    .mySlides {
+      display: none; /* Masquer par défaut */
+  }
+  
+  .mySlides.active {
+      display: block; /* Afficher seulement le slide actif */
+  }
