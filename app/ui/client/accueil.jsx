@@ -10,6 +10,7 @@ const  Accueil=()=>{
   const [succed, setSucced] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [loadingContact, setLoadingContact] = useState(false)
   
   const slides = [
       { image: '/images/info1.png', title: 'We can help you develop web and mobile applications' },
@@ -19,36 +20,47 @@ const  Accueil=()=>{
 
   const handleSendContact = async(e) => {
     e.preventDefault()
-    setLoading(true)
-    const requestOptions = {
-      method : 'POST',
-      headers : {
-        "Content-Type" : "application/json",
-      },
-      body : JSON.stringify({
-        email,
-        textBody,
-        contactName,
-      })
-    }
-    const response = await fetch('/api/client/contact', requestOptions)
-    
-    if (response){
-      const data = await response.json();
-      if (data.message == 'Success'){
-        setLoading(false)
-        alert('Contact Message send Successfully')
+    setLoadingContact(true)
+    try {
+        const requestOptions = {
+        method : 'POST',
+        headers : {
+          "Content-Type" : "application/json",
+        },
+        body : JSON.stringify({
+          email,
+          textBody,
+          contactName,
+        })
+      }
+      const response = await fetch('/api/client/contact', requestOptions)
+      
+      if (response){
+        const data = await response.json();
+        if (data.message == 'Success'){
+          alert('Contact Message send Successfully')
+        }
+        else{
+          setErrorContact('Message not send, Try again later')
+          const timer = setTimeout(()=>{
+            setErrorContact('')
+          },
+            4000
+          )
+          
+          console.log('error',response)
+        }
       }
       else{
-        setLoading(false)
-        setError('Message not send, Try again later')
-        console.log('error',response)
+        setErrorContact('Mail not sended try again later')
       }
+    } catch (error) {
+      setErrorContact('Erreur dans l\'envoi ')
     }
-    else{
-      setLoading(false)
-      setErrorContact('Mail not sended try again later')
+    finally{
+      setLoadingContact(false)
     }
+    
   }
 
   const handleClickNewsLetter = async(e)=>{
@@ -75,7 +87,6 @@ const  Accueil=()=>{
       if (req){
         const response = await req.json()
         if (response.message === 'Success'){
-          setLoading(false)
           setSucced(true)
           setSuccess('You are well saved to the newsLetter')
           const timer = setTimeout(() => {
@@ -85,7 +96,6 @@ const  Accueil=()=>{
           return () => clearTimeout(timer);
         }
         else if (response.message != 'Error' && message != 'Success'){
-          setLoading(false)
           setSuccess(response.message)
           const timer = setTimeout(() => {
             setSuccess('')
@@ -93,7 +103,6 @@ const  Accueil=()=>{
           return () => clearTimeout(timer);
         }
         else{
-          setLoading(false)
           setSuccess('You are not saved to the newsLetter, Please try again later')
           const timer = setTimeout(() => {
             setSuccess('')
@@ -102,11 +111,13 @@ const  Accueil=()=>{
         }
       }
     } catch (error) {
-      setLoading(false)
       const timer = setTimeout(() => {
         setSuccess("Error in submitting at newsLetter, Please try again later")
       }, 4000);
       return () => clearTimeout(timer);
+    }
+    finally{
+      setLoading(false)
     }
   }
   const handleClick = () => {
@@ -569,7 +580,7 @@ const  Accueil=()=>{
                         <textarea value={textBody} onChange={(e)=>setTextBody(e.target.value)} className="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="message" placeholder="Enter your message here"></textarea>
                     </div>
                 </div>
-                <button type="submit" onClick={handleSendContact} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Send</button>
+                <button type="submit" onClick={handleSendContact} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">{loadingContact ? 'Sending...' : 'Send'}</button>
             </form>
           </div>
         </div>

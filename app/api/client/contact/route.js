@@ -59,7 +59,7 @@ export async function POST(request){
             }
             
               // Exécuter la requête SQL pour inserer le message 
-              const req=await executeQuery('INSERT INTO contact (userId,email,name,message,typeMail) VALUES (?,?,?,?,?)',[user,email,contactName,textBody,'contact-us'])
+              const req=await executeQuery('INSERT INTO contact (userId,email,name,message,typeMail) VALUES (?,?,?,?,?)',[0,email,contactName,textBody,'contact-us'])
               console.log("object",req);
               if(req){
                 return Response.json({response:{message:'Success'}})
