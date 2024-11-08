@@ -5,10 +5,7 @@ export async function POST(request){
     const data=await request.json();
     console.log('first', data)
     const {email, textBody, contactName}=data;
-    console.log("object",textBody,email,contactName);
     if(email && textBody && contactName){
-      
-      console.log("ok",email);
         try {
             //Envoie d'Email pour la validation du compte
             const mailOptions = {
@@ -60,9 +57,7 @@ export async function POST(request){
             
               // Exécuter la requête SQL pour inserer le message 
               const req=await executeQuery('INSERT INTO contact (userId,email,name,message,typeMail) VALUES (?,?,?,?,?)',[0,email,contactName,textBody,'contact-us'])
-              console.log("object",req);
               if(req.affectedRows > 0){
-                console.log('firstp')
                 return Response.json({response:{message:'Success'}})
               }else{
                 console.log("Sql error");

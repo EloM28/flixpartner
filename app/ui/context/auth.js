@@ -6,32 +6,40 @@ import jwt from 'jsonwebtoken';
 const SessionContext = React.createContext();
 
 function SessionProvider(props) {
-    const [session, setSession] = useState()
-  useEffect(() => {
+  const [session, setSession] = useState()
+  const [forceUpdate, setForceUpdate] = useState(false)
+  
   async function decodeJWT(token) {
-    try {
-      if(token){
-        const decoded = jwt.decode(token);
-        return setSession(decoded);
-      }else{
-      return setSession('unlogged');
+      try {
+        if(token){
+          const decoded = jwt.decode(token);
+          return setSession(decoded);
+        }else{
+        return setSession('unlogged');
+        }
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+        return setSession('unlogged');
       }
-    } catch (error) {
-      console.error('Error decoding JWT:', error);
-      return setSession('unlogged');
     }
-  }
+  const handleLogin = (token) => {
+    decodeJWT(token);
+    localStorage.setItem('token', token);
+    setForceUpdate((prev) => !prev); // Force une mise à jour
+  };
 
-  /*if (typeof window !== 'undefined') {
+  useEffect(() => {
+  if (typeof window !== 'undefined') {
     const token = localStorage.getItem('token');
       decodeJWT(token);
-  }*/
-}, [typeof window !== 'undefined' && localStorage.getItem('token')]);
+  }
+}, [typeof window !== 'undefined' && localStorage.getItem('token'), forceUpdate]);
 
   return (
     <SessionContext.Provider
       value={{
-        session
+        session,
+        login: handleLogin
       }}>
       {props.children}
     </SessionContext.Provider>

@@ -4,10 +4,10 @@ import executeQuery from '../../../../_utils/db';
 import bcrypt from "bcryptjs/dist/bcrypt";
 export async function POST(request) {
   try {
-  const secret="N33U8477474473"
-   const data=  await request.json();
-   const identifient=data.identifient;
-   const motdepasse=data.password
+    const secret="N33U8477474473"
+    const data=  await request.json();
+    const identifient=data.identifient;
+    const motdepasse=data.password
     console.log(data)
     const results = await executeQuery('SELECT * FROM users WHERE (email=? || Telephone=?) ',([identifient,identifient]))
   console.log('result1',results);
