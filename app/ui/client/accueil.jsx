@@ -5,8 +5,9 @@ const  Accueil=()=>{
   const [email, setEmail] = useState("")
   const [textBody, setTextBody] = useState("")
   const [newsLetter, setNewsLetter ] = useState("")
-  const [errorContact, setErrorContact] = useState("")
+  const [contactMessage, setContactMessage] = useState("")
   const [success, setSuccess] = useState("")
+  const [successContact, setSuccessContact] = useState(false)
   const [succed, setSucced] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -37,28 +38,37 @@ const  Accueil=()=>{
       
       if (response){
         const data = await response.json();
-        if (data.message == 'Success'){
-          alert('Contact Message send Successfully')
+        if (data.response.message == 'Success'){
+          setSuccessContact(true)
+          setContactMessage('Message sended')
+          const timer = setTimeout(()=>{
+            setContactMessage('')
+            setSuccessContact(false)
+          }, 4000)
+          return () => clearTimeout(timer)
         }
         else{
-          setErrorContact('Message not send, Try again later')
+          setContactMessage('Message not send, Try again later')
           const timer = setTimeout(()=>{
-            setErrorContact('')
+            setContactMessage('')
           },
             4000
           )
-          
           console.log('error',response)
+          return ()=>clearTimeout(timer)
         }
       }
       else{
-        setErrorContact('Mail not sended try again later')
+        setContactMessage('Mail not sended try again later')
       }
     } catch (error) {
-      setErrorContact('Erreur dans l\'envoi ')
+      setContactMessage('Erreur dans l\'envoi ')
     }
     finally{
       setLoadingContact(false)
+      setEmail('')
+      setContactName('')
+      setTextBody('')
     }
     
   }
@@ -563,7 +573,7 @@ const  Accueil=()=>{
     <div className="flex justify-center items-center">
         <div className="max-w-md w-full bg-blue-400 p-4 rounded-lg shadow-lg" id="signup">
             <h2 className="text-2xl font-bold mb-6 text-center text-white">Contact Us</h2>
-            <span className="text-red-500">{errorContact}</span>
+            <span className={`${successContact? "text-white" : "text-red-500"}`}>{contactMessage}</span>
             <form action="#" method="POST">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700"></label>

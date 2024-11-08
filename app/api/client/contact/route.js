@@ -13,7 +13,7 @@ export async function POST(request){
             //Envoie d'Email pour la validation du compte
             const mailOptions = {
               from: email,
-              to: 'teramaflix@gmail.com',
+              to: 'davidkima06@gmail.com',
               subject: 'Contact us message',
               html: `
                 <html>
@@ -61,7 +61,8 @@ export async function POST(request){
               // Exécuter la requête SQL pour inserer le message 
               const req=await executeQuery('INSERT INTO contact (userId,email,name,message,typeMail) VALUES (?,?,?,?,?)',[0,email,contactName,textBody,'contact-us'])
               console.log("object",req);
-              if(req){
+              if(req.affectedRows > 0){
+                console.log('firstp')
                 return Response.json({response:{message:'Success'}})
               }else{
                 console.log("Sql error");
