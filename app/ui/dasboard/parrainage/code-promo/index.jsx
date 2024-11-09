@@ -3,7 +3,7 @@ import { SessionContext } from '@/app/ui/context/auth'
 import React, {useContext, useEffect, useState} from 'react'
 
 function PromoCode() {
-    const session = useContext(SessionContext)
+    const {session} = useContext(SessionContext)
     const [promoCode, setPromoCode] = useState('')
     const [success, setSuccess] = useState('')
     const [loading, setLoading] = useState(false)
@@ -16,19 +16,32 @@ function PromoCode() {
             e.preventDefault()
             setLoading(true)
             if (!reg.test(promoCode)) {
-                setError("The referral code must not have whitespace and must be in UpperCase, Please try again")
+                console.log('first', promoCode)
+                setError(true)
+                setLoading(false)
+                setSuccess("The referral code must not have whitespace and must be in UpperCase, Please try again")
+                const timer = setTimeout(() => {
+                    setSuccess('')
+                    setError(false)
+                }, 4000)
+
+                return () => clearTimeout(timer)
             } else {
+                console.log('firstoj', session, promoCode)
                try {
+                const user = session?.user
+                const email = session?.email
+                console.log('res', user, email)
                 const requestOptions ={
                     method : 'POST',
                     headers : {
                         "Content-Type": "application/json"
                     },
-                    body : {
-                        user : session?.user,
-                        email : session?.email,
+                    body : JSON.stringify({
+                        user,
+                        email,
                         promoCode
-                    }
+                    })
                 }
                 const res = await fetch('/client/api/promo-code', requestOptions)
                 if (res){
@@ -40,13 +53,36 @@ function PromoCode() {
                             setSuccess('')
                         }, 4000)
                         return () => clearTimeout(timer)
+                    } else if (response.message == 'errorCode') {
+                        setError(true)
+                        setSuccess('Referral code already exist')
+                        const timer = setTimeout(()=>{
+                            setSuccess('')
+                            setError(false)
+                        }, 4000)
+                        return () => clearTimeout(timer)
+                    } else {
+                        setError(true)
+                        setSuccess('Referral code creation failed')
+                        const timer = setTimeout(()=>{
+                            setSuccess('')
+                            setError(false)
+                        }, 4000)
+                        return () => clearTimeout(timer)
                     }
                 } else { 
                     setError(true)
+                    setSuccess('Referral code creation failed, Please try again later')
+                    const timer = setTimeout(()=>{
+                        setSuccess('')
+                        setError(false)
+                    }, 4000)
+                    return () => clearTimeout(timer)
                 }
             } catch (error) {
                 setError(true)
-                setSuccess('Referral code creation failed, Please try again later')
+                console.log('firsterror', error)
+                setSuccess('Referral code creation failed')
                 const timer = setTimeout(()=>{
                     setSuccess('')
                     setError(false)
@@ -66,8 +102,8 @@ function PromoCode() {
   return (
     <section className="p-4 flex flex-col items-center mt-20">
         <div className="flex justify-center items-center">
-            <span className={`${error ? "text-red-500" : "text-green-500"}`}>{success}</span>
             <div className="w-full max-w-md px-4 py-8 bg-blue-400 rounded-lg shadow-lg sm:px-6 md:px-8 lg:px-10">
+                <span className={`${error ? "text-red-500" : "text-green-500"}`}>{success}</span>
                 <h1 className="text-xl font-bold mb-4 text-white">Referral code</h1>
                 <p className="text-white">Enter your code which is composed of capital letters and special characters.</p>   
 

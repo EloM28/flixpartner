@@ -1,6 +1,7 @@
 "use client"
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../context/auth";
+import { routerLinks, apiLinks } from "../../_libs/links";
 
 const Login=()=>{
   const { login } = useContext(SessionContext)
@@ -42,14 +43,10 @@ const Login=()=>{
             body: JSON.stringify(data)
           };
 
-          const res = await fetch('/client/api/login',requestOptions);
-          console.log('object1', res)
+          const res = await fetch(apiLinks.login, requestOptions);
           const datas=await res.json();
           if(datas.success){
-            console.log('object4', datas.token)
-            console.log('object3', datas.results)
             const results=datas.results;
-            console.log('object', results)
             login(datas.token);
             setLoading(false)
             if(results[0].typeuser=='partenaire'){
@@ -71,8 +68,11 @@ const Login=()=>{
           console.error("Erreur lors de l'insertion des données :", error);
           setError("Erreur lors de l'insertion des données")
         }
-        }
-      
+      }
+    
+  useEffect( () =>{
+    localStorage.removeItem('token-teramapartrner')
+  }, [])
 
   return(
   <div className="flex justify-center items-center">
@@ -106,7 +106,7 @@ const Login=()=>{
           className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">{loading ? 'Login...':'Login'}</button>
       </form>
       <a href="/client/forgotpass" className="text-blue-500 hover:text-blue-700">mot de passe oublie?</a>
-      <p className="mt-4 text-center">Don't have an account? <a href="/client/register" className="text-blue-500 hover:text-blue-700">Sign Up</a></p>
+      <p className="mt-4 text-center">Don't have an account? <a href={routerLinks.register} className="text-blue-500 hover:text-blue-700">Sign Up</a></p>
     </div>
   </div>
   )

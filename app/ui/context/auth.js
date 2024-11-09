@@ -24,7 +24,7 @@ function SessionProvider(props) {
     }
   const handleLogin = (token) => {
     decodeJWT(token);
-    localStorage.setItem('token', token);
+    localStorage.setItem('token-teramapartrner', token);
     setForceUpdate((prev) => !prev); // Force une mise à jour
   };
 
