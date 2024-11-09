@@ -44,3 +44,19 @@ export async function POST(request){
     }
     
 }
+
+export async function GET(request, {params}) {
+    const user = request.headers.get('user')
+
+    try {
+        const req = await executeQuery('SELECT * FROM promotion WHERE iduser = ?', [user])
+        if (req[0] != null) {
+            return Response.json({ Success : true, data : req[0]})
+        } else {
+            return Response.json({ Success : false})
+        }
+    } catch (error) {
+        console.log('Error', error)
+        return Response.json({ Success : false})
+    }
+}

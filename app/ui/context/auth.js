@@ -30,8 +30,8 @@ function SessionProvider(props) {
 
   useEffect(() => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-      decodeJWT(token);
+    const token = localStorage.getItem('token-teramapartrner');
+    decodeJWT(token);
   }
 }, [typeof window !== 'undefined' && localStorage.getItem('token'), forceUpdate]);
 

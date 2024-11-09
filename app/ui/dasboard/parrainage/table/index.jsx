@@ -1,21 +1,38 @@
 "use client";
-import { React, useState, useEffect, useRef } from "react";
+import { React, useState, useEffect, useRef, useContext } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import AffiliateAction from "./actions-affiliate";
 import AffiliateTable from "./table-affiliate";
-import Link from "next/link";
+import { SessionContext } from "../../../context/auth";
 
 const Affiliate = () => {
-
-  const [displayMoDetail, setDisplayMoDetail] = useState(false);
-  const [showAction, setShowAction] = useState(false);
-
-  const detailsRef = useRef(null);
+  const { push } = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { session } = useContext(SessionContext)
+  const detailsRef = useRef(null)
+  const [success, setSuccess] = useState('')
+  const [code, setCode] = useState('')
+  const [displayMoDetail, setDisplayMoDetail] = useState(false)
+  const [showAction, setShowAction] = useState(false)
+  const [error, setError] = useState(false)
+  const [viewCode, setViewCode] = useState(false)
 
   const handleClickOutside = (event) => {
     if (detailsRef.current && !detailsRef.current.contains(event.target)) {
       setDisplayMoDetail(false);
     }
-  };
+  }; 
+  const closeModalAction = ()=>{
+      setShowAction(false);
+  }
+  
+  const handleViewCode = async(key, value) => {
+    const params = new URLSearchParams(searchParams)
+    params.set(key, value)
+    push(`/client/dashboard/parrainage/view-code-promo?${params.toString()}`)
+  }
   useEffect(() => {
     if (displayMoDetail) {
       document.addEventListener("mousedown", handleClickOutside);
@@ -27,15 +44,44 @@ const Affiliate = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [displayMoDetail]);
+ 
+  useEffect(() => {
+    const fetchdata = async () => {
+        try {
+            const user = session?.user
+            const res = await fetch('/client/api/promo-code/', {
+              method : "GET",
+              headers : {
+                user
+              }
+            })
+            if (res) {
+              const data = await res.json()
+              if (data.Success) {
+                console.log('resp', data.data)
+                setViewCode(true)
+                setCode(data.data.codepromo)
+              } else {
+                setViewCode(false)
+              }
+            } 
+        } catch (error) {
+          setError(true)
+          setSuccess('Getting referral code fail')
+        }
+    }
+    fetchdata()
+  }, [session])
 
-  const closeModalAction = ()=>{
-    setShowAction(false);
-  }
+  
 
   return (
     <div className="relative rounded-md bg-white md:mt-10 pt-10 w-full">
       <div className="flex justify-end mr-2 mb-3">
-        <Link href='/client/dashboard/parrainage/code-promo/' className="bg-transparent hover:bg-blue-300 text-blue-300 font-semibold hover:text-white py-2 px-4 border border-blue-300 hover:border-transparent rounded">Create code promo</Link>
+        {viewCode ? 
+        <button onClick={() => handleViewCode('code', code)} className="bg-transparent hover:bg-blue-300 text-blue-300 font-semibold hover:text-white py-2 px-4 border border-blue-300 hover:border-transparent rounded">View code</button>
+        : <Link href='/client/dashboard/parrainage/code-promo/' className="bg-transparent hover:bg-blue-300 text-blue-300 font-semibold hover:text-white py-2 px-4 border border-blue-300 hover:border-transparent rounded">Create code promo</Link>
+        }
       </div>
       <div className="w-[100%] h-[100%]">
         {showAction && (

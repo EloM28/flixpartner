@@ -42,10 +42,8 @@ const Register = () => {
                     },
                     body: JSON.stringify(data)
                 };
-                console.log('first register', requestOptions)
                 const res = await fetch(apiLinks.register,requestOptions);
                 const datas = await res.json()
-                console.log('firstpart', datas)
                 if(datas.Success){
                     setLoading(false)
                     router.push(routerLinks.login);

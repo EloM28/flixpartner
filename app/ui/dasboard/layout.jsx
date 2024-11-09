@@ -10,7 +10,7 @@ const DashClientLayout=()=>{
       setIsDropdownVisible((prevState) => !prevState);
     }
   const Logout=()=>{
-    localStorage.removeItem('token');
+    localStorage.removeItem('token-teramapartrner');
     router.push('/client/login');
   }
   return (

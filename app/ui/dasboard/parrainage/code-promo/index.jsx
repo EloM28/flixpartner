@@ -16,7 +16,6 @@ function PromoCode() {
             e.preventDefault()
             setLoading(true)
             if (!reg.test(promoCode)) {
-                console.log('first', promoCode)
                 setError(true)
                 setLoading(false)
                 setSuccess("The referral code must not have whitespace and must be in UpperCase, Please try again")
@@ -27,11 +26,9 @@ function PromoCode() {
 
                 return () => clearTimeout(timer)
             } else {
-                console.log('firstoj', session, promoCode)
                try {
                 const user = session?.user
                 const email = session?.email
-                console.log('res', user, email)
                 const requestOptions ={
                     method : 'POST',
                     headers : {
@@ -94,10 +91,6 @@ function PromoCode() {
             }
         }
     }
-
-    useEffect(() => {
-        localStorage.removeItem('token');
-      }, [])
 
   return (
     <section className="p-4 flex flex-col items-center mt-20">
