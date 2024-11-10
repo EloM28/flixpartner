@@ -3,7 +3,7 @@ import { SessionContext } from '@/app/ui/context/auth'
 import React, {useContext, useEffect, useState} from 'react'
 
 function PromoCode() {
-    const {session} = useContext(SessionContext)
+    const { session } = useContext(SessionContext)
     const [promoCode, setPromoCode] = useState('')
     const [success, setSuccess] = useState('')
     const [loading, setLoading] = useState(false)

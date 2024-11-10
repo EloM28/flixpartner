@@ -4,14 +4,16 @@ import { useState,useRef,useContext,useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 const  ViewCode=({ code })=>{
-    const user = useContext(SessionContext)
+    const { session } = useContext(SessionContext)
     const searchParams = useSearchParams()
-    const router = useRouter();
-    const id=user?.user;
+    const { push } = useRouter();
+    const [success, setSuccess] = useState('');
     const [promoCode, setPromoCode] = useState('');
     const [isCopied, setIsCopied] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const inputField = useRef(null);
-    const [error, setError] = useState('');
+    const reg = /^[A-Z0-9\W]+/
     
     const handleCopy = () => {
         // Copy the URL to the clipboard
@@ -24,10 +26,90 @@ const  ViewCode=({ code })=>{
           setIsCopied(false);
         }, 4000);
       };
+    const handleChange = async(e) => {
+        e.preventDefault()
+        if (!reg.test(promoCode)) {
+            setError(true)
+            setLoading(false)
+            setSuccess("The referral code must not have whitespace and must be in UpperCase, Please try again")
+            const timer = setTimeout(() => {
+                setSuccess('')
+                setError(false)
+            }, 4000)
+
+            return () => clearTimeout(timer)
+        } else {
+            try {
+                const user = session?.user
+                const email = session?.email
+                const requestOptions ={
+                    method : 'PUT',
+                    headers : {
+                        "Content-Type": "application/json"
+                    },
+                    body : JSON.stringify({
+                        user,
+                        email,
+                        promoCode
+                    })
+                }
+                const res = await fetch('/client/api/promo-code', requestOptions)
+                if (res) {
+                    const response = await res.json()
+                    if (response.message == "Success") {
+                        setSuccess('Referral code changed successfully')
+                        setTimeout(()=>{
+                            setSuccess('')
+                        }, 4000)
+                        const params = new URLSearchParams(searchParams)
+                        params.set('code', promoCode)
+                        push(`/client/dashboard/parrainage/view-code-promo?${params.toString()}`)
+                    } else if (response.message == 'errorCode') {
+                        setError(true)
+                        setSuccess('Referral code already exist')
+                        const timer = setTimeout(()=>{
+                            setSuccess('')
+                            setError(false)
+                        }, 4000)
+                        return () => clearTimeout(timer)
+                    } else {
+                        setError(true)
+                        setSuccess('Referral code modification failed')
+                        const timer = setTimeout(()=>{
+                            setSuccess('')
+                            setError(false)
+                        }, 4000)
+                        return () => clearTimeout(timer)
+                    }
+                } else { 
+                    setError(true)
+                    setSuccess('Referral code modification failed, Please try again later')
+                    const timer = setTimeout(()=>{
+                        setSuccess('')
+                        setError(false)
+                    }, 4000)
+                    return () => clearTimeout(timer)
+                }
+            } catch (error) {
+                console.log('Error', error)
+                setError(true)
+                setSuccess('Modification failed')
+                const timer = setTimeout(() => {
+                    setSuccess('')
+                    setError(false)
+                }, 4000)
+    
+                return () => clearTimeout(timer)
+            } finally {
+                setLoading(false)
+            }
+
+        }
+    }
     useEffect(()=>{
         const code = searchParams.get('code')
         setPromoCode(code)
-    },[user])
+    },[session, searchParams])
     return(
         <>
     <section className="p-4 flex flex-col items-center mt-20">
@@ -35,7 +117,7 @@ const  ViewCode=({ code })=>{
             <div className="w-full max-w-md px-4 py-8 bg-blue-400 rounded-lg shadow-lg sm:px-6 md:px-8 lg:px-10">
                 <h1 className="text-xl font-bold mb-4 text-white">Referral Code</h1>
                 <p className="text-white">You can copy your referral code by clicking the copy button and share it with your referrals.</p>
-        <span className="text-red-500">{error}</span>        
+        <span className={`${error ? "text-red-500" : "text-xl font-bold text-white"}`}>{success}</span>        
         <div className="w-full max-w-sm mt-7">
             <div className="flex items-center">
             <button onClick={handleCopy} data-tooltip-target="tooltip-url-shortener" data-copy-to-clipboard-target="url-shortener" className="flex-shrink-0 z-10 inline-flex items-center py-3 px-4 text-sm font-medium text-center text-gray-500 dark:text-gray-400 hover:text-gray-900 bg-gray-100 border border-gray-300 rounded-l-md hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:hover:text-white dark:border-gray-600" type="button">
@@ -52,10 +134,10 @@ const  ViewCode=({ code })=>{
                 </button>
                 <div className="relative w-full">
                     <input id="url-shortener"  type="text" aria-describedby="helper-text-explanation" className="bg-gray-50 border border-e-0 border-gray-300 text-gray-500 dark:text-gray-400 text-sm border-s-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    value={promoCode}  placeholder="Type your code" readOnly />
+                    value={promoCode} onChange={(e)=>{setPromoCode(e.target.value)}} placeholder="Type your code"/>
                 </div>
-                {/* <button className=" flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-blue-600 dark:bg-blue-600 border hover:bg-blue-800 dark:hover:bg-blue-700 rounded-r-lg border-blue-600 dark:border-blue-600 hover:border-blue-700 dark:hover:border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">Create That Code</button>
-                <div id="tooltip-url-shortener" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                <button onClick={handleChange} className=" flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-white bg-blue-600 dark:bg-blue-600 border hover:bg-blue-800 dark:hover:bg-blue-700 rounded-r-lg border-blue-600 dark:border-blue-600 hover:border-blue-700 dark:hover:border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">Change</button>
+              {/*  <div id="tooltip-url-shortener" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                     <span id="default-tooltip-message">Copy link</span>
                     <span id="success-tooltip-message" className={`${!isCopied && "hidden"}`}>Copied!</span>
                     <div className="tooltip-arrow" data-popper-arrow></div>

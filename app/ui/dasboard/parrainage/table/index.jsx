@@ -58,7 +58,6 @@ const Affiliate = () => {
             if (res) {
               const data = await res.json()
               if (data.Success) {
-                console.log('resp', data.data)
                 setViewCode(true)
                 setCode(data.data.codepromo)
               } else {
