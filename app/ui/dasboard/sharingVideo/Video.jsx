@@ -90,7 +90,7 @@ function Video({video}) {
                   video.Photo ? 
                   <Image width={500} height={500} alt='profile' 
                   className=" w-10  h-10 my-1 ml-15 rounded-full " 
-                  src={`${process.env.NEXT_PUBLIC_URL}/Thumbnails/${video.Photo}`}
+                  src={`http://localhost:3001/Thumbnails/${video.Photo}`}
                   priority={true} placeholder='blur' 
                   blurDataURL="data:image/png;base64,...(base64-encoded image data)"/>
                   :

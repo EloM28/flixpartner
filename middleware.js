@@ -6,11 +6,10 @@ export async function middleware(request) {
     const url = request.nextUrl;
     const pathname = url.pathname;
     const cookie = request.cookies.get('token-teramapartrner')?.value
-    console.log('cookie', cookie, request.url)
+    // console.log('cookie', cookie, request.url)
     if (cookie) {
         var session = cookie
-    }
-    else {
+    } else {
         var session = null
     }
 
