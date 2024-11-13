@@ -72,11 +72,11 @@ function Video({video}) {
           <div className="imag relative w-[100%] sm:h-[170px] h-[220px] flex justify-center items-center  sm:rounded bg-gray-300  overflow-hidden">
              {
               video.Short == 1 ?
-              <Link href={`/short`}> 
+              <Link href={`http://localhost:3001/short`}> 
                  <ImageComp src={video.Image} w={800} h={800} a={'video'} />
               </Link>
               :
-              <Link href={`/Watch?v=${video.uniid}`}>
+              <Link href={`http://localhost:3001/Watch?v=${video.uniid}`}>
                 <ImageComp src={video.Image} w={800} h={800} a={'video'} />
               </Link>
              }
