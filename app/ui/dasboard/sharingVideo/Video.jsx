@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import ImageComp from './ImageComp'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const usePeriod = (Created_at)=>{
   const today   = new Date();
@@ -65,6 +66,21 @@ function formatTime(time) {
 
 function Video({video}) {
   const period = usePeriod(video.Created_at)
+  const searchParams = useSearchParams()
+  const { push } = useRouter()
+  const [error, setError] = useState('')
+
+  const handleDetail = async(id, views) => {
+    try {
+      const params = new URLSearchParams(searchParams)
+      params.set('v', id)
+      params.set('vw', views)
+      push(`/client/dashboard/sharing-video/detail-video?${params.toString()}`)
+    } catch (error) {
+      console.error(error)
+      setError('Error')
+    }
+  }
   return (
     <>
        <div className='dark:bg-medium dark:border-2 dark:border-slate-800 bg-white rounded-md '>
@@ -72,19 +88,19 @@ function Video({video}) {
           <div className="imag relative w-[100%] sm:h-[170px] h-[220px] flex justify-center items-center  sm:rounded bg-gray-300  overflow-hidden">
              {
               video.Short == 1 ?
-              <Link href={`http://localhost:3001/short`}> 
+              <button href='#' onClick={()=>handleDetail(video.uniid, video.Views)}> 
                  <ImageComp src={video.Image} w={800} h={800} a={'video'} />
-              </Link>
+              </button>
               :
-              <Link href={`http://localhost:3001/Watch?v=${video.uniid}`}>
+              <button href='#' onClick={()=>handleDetail(video.uniid, video.Views)}>
                 <ImageComp src={video.Image} w={800} h={800} a={'video'} />
-              </Link>
+              </button>
              }
              {video.Time>0 && (<span className='bg-black bg-opacity-70 text-white text-sm  absolute left-2 bottom-1 px-1 rounded-md'>{formatTime(video.Time)}</span> ) }
           </div>
           <div className='dark:bg-medium id  py-2 pl-4'>
           <h1 title={video.Title} className="dark:text-white font-bold text-slate-900 text-lg ml-2 mb-2 sm:ml-0">{truncateText(video.Title, 25)}</h1>
-            <Link href={`/profile?c=${video.Uuid}`}>
+            <Link href={`#`}>
             <div className="flex gap-2 justify-start mb-4  ml-2 sm:ml-0">
               {
                   video.Photo ? 
