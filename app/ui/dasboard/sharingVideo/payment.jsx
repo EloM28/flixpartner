@@ -3,6 +3,7 @@
 import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FacturePublicite from "./facture";
+import Facture from "./facture";
 const MethodPayment=({data})=>{
     const router = useRouter();
     const [modepayment,setModePayment]= useState("");
@@ -10,10 +11,13 @@ const MethodPayment=({data})=>{
     const [phonenumber,setPhoneNumber]=useState("")
     const [code,setCode]=useState("")
     const [datas, setData]=useState([]);
-    const [activeFacture , setActiveFacture]=useState(0)
-    const [Activepayment,setActivePayment]=useState(1)
+    const [activeFacture , setActiveFacture]=useState(false)
+    const [Activepayment,setActivePayment]=useState(true)
     const [errormessage,setmessage]=useState("")
     const [paymentId,setPaymentId]=useState("")
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
 
     const clickbouttonEnvoyer=async(code)=>{
     try{ 
@@ -59,15 +63,11 @@ const MethodPayment=({data})=>{
     } 
     }
 
-  const activeFact=()=>{
-  setData(data)
-  setActiveFacture(1)
-  setActivePayment(0)
-  }
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpen2, setIsOpen2] = useState(false);
-  const [isOpen3, setIsOpen3] = useState(false);
-
+  const openFacture=()=>{
+    setData(data)
+    setActiveFacture(true)
+    setActivePayment(false)
+    }
 
   const toggleModal = () => {
     setmessage("")
@@ -144,13 +144,31 @@ const MethodPayment=({data})=>{
   },[paymentId])
     return (
          <>
-        {Activepayment===1 &&
+         {activeFacture && <Facture formdata={data}/>}
+        {Activepayment &&
         <div className="w-full">
         <div className='flex items-center justify-center w-full'>
           <div className='flex space-x-4 md:space-x-20 w-full'>
             <div className='flex min-h-screen mt-8 md:mt-16 pb-24 md:pb-5 bg-white overflow-y-auto overflow-x-auto w-full'>
               <div className="flex min-h-[650px] w-full">
                 <div className="relative shadow-md sm:rounded-lg w-full">
+                <button onClick={openFacture}
+                        className="flex items-center px-2 m-1  hover:text-white rounded hover:bg-blue-500">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12H3m0 0l6-6m-6 6l6 6"
+                          />
+                        </svg>
+                    </button>
                   <div className='flex justify-center items-center mt-4 font-bold text-xl'>Pay by</div>
                   <div className='md:flex justify-center items-center md:space-x-4 lg:space-x-10 mt-10'>
                       <div className='flex justify-center items-center'>
@@ -185,8 +203,8 @@ const MethodPayment=({data})=>{
               </div>
             </div>
               
-                         {/* Modal */}
-                         {isOpen && (
+                {/* Modal */}
+                {isOpen && (
                   <div className="fixed md:z-10 inset-0 overflow-y-auto">
                       <div className="flex items-center justify-center min-h-screen">
                           <div className="bg-blue-500 w-full md:w-2/3 lg:w-1/2 p-6 rounded shadow-md">
