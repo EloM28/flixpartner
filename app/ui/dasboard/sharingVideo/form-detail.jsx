@@ -3,7 +3,7 @@ import React,{useState,useEffect,useContext} from 'react'
 import { SessionContext } from '../../context/auth';
 import Facture from './facture'
 
-const FormDetail = ({files}) => {
+const FormDetail = (data) => {
     const users=useContext(SessionContext);
     const session=users?.session
     const { useRouter, useSearchParams } = require('next/navigation');
@@ -68,7 +68,10 @@ const FormDetail = ({files}) => {
     };
     FetchPrix()
     },[session]);
-
+    const back=()=>{
+      setFormActive(false)
+      router.push('/client/dashboard/sharing-video/search-video')
+    }
     const onClickButton= async()=>{
  
       const data=[
@@ -97,6 +100,15 @@ const FormDetail = ({files}) => {
   }; 
 
   useEffect(() => {
+    if (data){
+      console.log('data from back', data.data?.date)
+    }
+    
+    if (data) {
+      setDays(data.data?.days)
+      setDateFin(data.data?.date)
+      setPrixSharing(data.data?.price)
+    }
     // Fonction pour définir la date minimale à aujourd'hui
     const today = new Date().toISOString().split('T')[0];
     setMinDate(today);
@@ -178,7 +190,8 @@ const FormDetail = ({files}) => {
             </div>
             
             <div className="mt-4 mb-20 md:mb-0 text-sm flex justify-between items-center container-mr">
-              <p className="mr-3 md:mr-0">If you agree..</p>
+              <button onClick={back}
+               className="hover:border register text-white bg-gray-500 hover:border-gray-700 rounded-xl py-2 px-5 hover:scale-110 hover:bg-gray-700 font-semibold duration-300">Back</button>
               <button onClick={onClickButton}
               className="hover:border register text-white bg-blue-500 hover:border-blue-700 rounded-xl py-2 px-5 hover:scale-110 hover:bg-blue-700 font-semibold duration-300">Next</button>
             </div>

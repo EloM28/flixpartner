@@ -1,12 +1,13 @@
 'use client'
 import {useState, useEffect} from 'react'
 import MethodPayment from './payment'
+import FormDetail from './form-detail';
 const Facture = ({ formdata }) => {
     const [donnees, setData] = useState([]);
-    const [openRetour, setOpenRetour] = useState(0);
+    const [openRetour, setOpenRetour] = useState(false);
     const [openFacture, setopenFacture] = useState(true);
     const [datasend, setDataSend] = useState([]);
-    const [openpaiement, setOpenPaiement] = useState(0);
+    const [openpaiement, setOpenPaiement] = useState(false);
 
     const affichemessage = async () => {
         console.log(formdata);
@@ -34,16 +35,21 @@ const Facture = ({ formdata }) => {
     }, [formdata]);
 
     const onclickBack = () => {
-        setDataSend(donnees); // Corrected to use `donnees` instead of `data`
-        setOpenRetour(1);
-        setopenFacture(0);
+        const data = {
+           date : formdata[4], 
+           days : formdata[9], 
+           price : formdata[5]
+        } 
+        setDataSend(data); // Corrected to use `donnees` instead of `data`
+        setOpenRetour(true);
+        setopenFacture(false);
     };
 
     const nextbutton = () => {
-        setDataSend(donnees); // Corrected to use `donnees`
-        setOpenRetour(0);
-        setopenFacture(0);
-        setOpenPaiement(1);
+        setDataSend(formdata); // Corrected to use `donnees`
+        setOpenRetour(false);
+        setopenFacture(false);
+        setOpenPaiement(true);
     };
 
     return (
@@ -71,7 +77,8 @@ const Facture = ({ formdata }) => {
                     </div>
                 </div>
             ))}
-            {openpaiement === 1 && <MethodPayment data={datasend} />}
+            {openRetour && <FormDetail data={datasend}/>}
+            {openpaiement && <MethodPayment data={datasend} />}
         </>
     );
 };
