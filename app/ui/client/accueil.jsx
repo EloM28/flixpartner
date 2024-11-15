@@ -490,80 +490,96 @@ const  Accueil=()=>{
        </div>
     </section>
     
-    <section id="ourteam" className="p-6 mt-12">
-        <div className="mx-auto text-center py-8 space-y-7">
-            <h1 className="text-2xl font-bold mb-3 text-white">Our Team</h1>
-            <div className="flex justify-center space-x-4">
-                <div className="space-y-10 justify-center">
-                  <div className="xl:flex xl:space-x-5 space-y-10 xl:space-y-0">
-                    <div className="md:flex md:space-x-5 space-y-10 md:space-y-0">
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
+    <section id="ourteam" className="mt-12 bg-white py-10">
+    <div className='mx-auto w-[100%] md:w-[90%] h-full'>
+            <span className='text-3xl underline flex justify-center'>Our Team </span>
+            <div className="lg:h-[95%] mt-6 w-full space-y-10">
+              <div className='w-full lg:flex justify-center items-center space-y-5 lg:space-y-0 lg:space-x-5 px-4 md:px-0'>
+              <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/developpeur3.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>BIZINDAVYI Leonce</span>
+                        <span className='text-sm md:text-lg font-medium '>Leader and Full-Stack Developer</span>
+                        <span className='text-sm md:text-md font-medium '>+25761258790</span>
                     </div>
-                    </div>
-                    <div className="md:flex md:space-x-5 space-y-10 md:space-y-0">
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                  <div className="xl:flex xl:space-x-5 space-y-10 xl:space-y-0">
-                    <div className="md:flex md:space-x-5 space-y-10 md:space-y-0">
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    </div>
-                    <div className="md:flex md:space-x-5 space-y-10 md:space-y-0">
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    <div className="relative shadow-lg">
-                      <img src="/images/Eric.JPG" alt="" className="h-80 w-full rounded-full shadow-lg opacity-90" />
-                      <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center bg-white bg-opacity-85 rounded-b-full p-3 space-y-2">
-                          <p className="text-xl font-bold">Directeur General</p>
-                          <p className="text-base text-blue-500 font-bold">NDUWAYO Eric</p>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
                 </div>
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/Gashimwe.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>GASHIMWE Aimee Emelyne</span>
+                        <span className='text-sm md:text-lg font-medium '>Full-Stack Developer</span>
+                        <span className='text-sm md:text-md font-medium '>+25761258790</span>
+                    </div>
+                </div>
+                </div> 
+        
+                <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/JMV.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NDAYIRAGIJE Jean Marie Vianne</span>
+                        <span className='text-sm md:text-lg font-medium '>Full-Stack Developer</span>
+                        <span className='text-sm md:text-md font-medium '>+25761613559</span>
+                    </div>
+                </div>
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/developpeur2.webp' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>GAKIZA Eddy Brave</span>
+                        <span className='text-sm md:text-lg font-medium '>front-end developer </span>
+                        <span className='text-sm md:text-md font-medium '>+25761258790</span>
+                    </div>
+                </div>
+                </div>              
+            </div>
+
+            <div className='w-full lg:flex justify-center items-center space-y-5 lg:space-y-0 lg:space-x-5 px-4 md:px-0'>
+              <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/Eric.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NDUWAYO Eric</span>
+                        <span className='text-sm md:text-lg font-medium '>front-end developer</span>
+                        <span className='text-sm md:text-md font-medium '>+25771174167</span>
+                    </div>
+                </div>
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/developper1.jfif' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>MUGISHA Eloge</span>
+                        <span className='text-sm md:text-lg font-medium '>Full-Stack Developer</span>
+                        <span className='text-sm md:text-md font-medium '>+25761258790</span>
+                    </div>
+                </div>
+                </div> 
+        
+                <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
+     
+                <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
+                    <div className='w-full h-[85%] lg:h-[80%] border'>
+                        <img  src='Images/Emma.png' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                    </div>
+                    <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
+                        <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NIYONGABO Emmanuel</span>
+                        <span className='text-sm md:text-lg font-medium '>front-end developer </span>
+                        <span className='text-sm md:text-md font-medium '>+25761258790</span>
+                    </div>
+                </div>
+                </div>              
+            </div>
             </div>
         </div>
     </section>
