@@ -12,6 +12,7 @@ const Affiliate = () => {
   const searchParams = useSearchParams()
   const { session } = useContext(SessionContext)
   const detailsRef = useRef(null)
+  const [users, setUsers] = useState([])
   const [success, setSuccess] = useState('')
   const [code, setCode] = useState('')
   const [displayMoDetail, setDisplayMoDetail] = useState(false)
@@ -59,7 +60,8 @@ const Affiliate = () => {
               const data = await res.json()
               if (data.Success) {
                 setViewCode(true)
-                setCode(data.data.codepromo)
+                setCode(data.data?.codepromo)
+                // fetchUserCode(code)
               } else {
                 setViewCode(false)
               }
@@ -72,7 +74,34 @@ const Affiliate = () => {
     fetchdata()
   }, [session])
 
-  
+  useEffect(()=>{
+    async function fetchUserCode(code){
+      try {
+        const requestOptions ={
+          method : 'POST',
+          headers : {
+            "Content-Type": "application/json"
+          },
+          body : JSON.stringify({
+            code : code
+          })
+      }
+        const res = await fetch(`http://localhost:3001/api/login/referral`, requestOptions);
+        const response = await res.json();
+        if (response){
+          setUsers(response)
+        }
+        else {
+          setError('Videos not fetched')
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(true)
+        setSuccess('Getting users code fail')
+      }
+    }
+    fetchUserCode(code)
+  }, [code])
 
   return (
     <div className="relative rounded-md bg-white md:mt-10 pt-10 w-full">
@@ -106,16 +135,19 @@ const Affiliate = () => {
                     <th className="text-start py-2 border bg-blue-300 p-2"> Price</th>
                   </tr>
                 </thead>
-                <tbody>         
-                <tr>
+                <tbody> 
+                
+                  {users.length > 0 && users.map((item, index)=>(
+                    <tr key={index}>
                         <AffiliateTable
-                          id={1}
-                          code={"ERIC"}
-                          users={"eric@gmail.com"}
-                          price={"1000"}
+                          id={item + 1}
+                          code={item.refer}
+                          users={item.Mail}
+                          price={"1.1"}
                         />
                       </tr>
-                
+                  ))}
+                                    
                 </tbody>
               </table>
             </div>

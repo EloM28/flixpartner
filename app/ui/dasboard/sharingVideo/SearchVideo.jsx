@@ -1,19 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Video from './Video';
-
-// export const getServerSideProps = async () => {
-//   try {
-//     const res = await axios.get('https://teramaflix.com/api/posts/0/0/4/');
-//     const response = await res.json();
-//     console.log('first', response)
-//     return { props: { medias: response } };
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//     return { props: { medias: [], error: 'Failed to fetch data' } };
-//   }
-// };
 
 const SearchVideo = () => {
   const [videos, setVideos] = useState(null);

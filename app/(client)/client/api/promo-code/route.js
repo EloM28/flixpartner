@@ -4,6 +4,7 @@ export async function POST(request){
     const datas = await request.json()
     const { user, email, promoCode } = datas
     try {
+        console.log('first', user)
         async function checkCodeUniqueness(codepromo, user) {
             // Vérifier si l'email est unique dans la base de données
             try {
@@ -26,7 +27,7 @@ export async function POST(request){
                 console.log('error in sql for checking Codepromo', error)
             }
         }
-        const isUnique = await checkCodeUniqueness(promoCode);
+        const isUnique = await checkCodeUniqueness(promoCode, user);
         if (isUnique !== 'true') {
             return new Response(JSON.stringify({ data: 'Referral code already exist or user have a referral code.', message: 'errorCode' }));
         }

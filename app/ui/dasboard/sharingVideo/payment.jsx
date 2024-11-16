@@ -13,7 +13,8 @@ const MethodPayment=({data})=>{
     const [datas, setData]=useState([]);
     const [activeFacture , setActiveFacture]=useState(false)
     const [Activepayment,setActivePayment]=useState(true)
-    const [errormessage,setmessage]=useState("")
+    const [message,setMessage]=useState("")
+    const [error, setError] = useState(true)
     const [paymentId,setPaymentId]=useState("")
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
@@ -21,15 +22,16 @@ const MethodPayment=({data})=>{
 
     const clickbouttonEnvoyer=async(code)=>{
     try{ 
-      const formData=new FormData()
-      formData.append('iduser',data[0].user)
-      formData.append('title',data[0].vidName)
-      formData.append('datefin',data[0].datefin)
-      formData.append('vidId',data[0].vidId)
-      formData.append('typepaiment',data[0].typepaiment)
-      formData.append('days',data[0].days)
-      formData.append('prixsharing',data[0].prixsharing)
-      formData.append('idpaiement',code)
+      const formData={
+        iduser : data[0],
+        title : data[3],
+        datefin : data[4],
+        vidId : data[7],
+        days : data[9],
+        prixsharing : data[5],
+        idpaiement : code,
+      }
+      
 
       // Réinitialiser les champs de saisie
       
@@ -38,29 +40,34 @@ const MethodPayment=({data})=>{
             'Content-Type' : 'application/json'
         },
         method: 'POST',
-        body:formData
+        body: JSON.stringify(formData)
       };  
-      console.log('datas', requestOptions)
-    //   const res = await fetch('/client/api/publicite/ajoute',requestOptions);
-    //   const response= await res.json()
-    //   if(res){
-    //     console.log(response)
-    //     if(response.message==="manquantes"){
-    //         setmessage(response.affiche)
-    //       }
-    //       else{
-    //         if(response.message==="correct"){
-    //         const formdatatocken= response.formdata
-    //         localStorage.setItem('formdata',formdatatocken)
-    //           window.location.reload()
-    //         } 
-    //       }
-      //router.push("/publicite/facture");
-      //toast.success('Opération réussie !');
-    //   } 
+      console.log('datas2', requestOptions)
+      const res = await fetch('/client/api/Dashboard/sharing-video/ajoute',requestOptions);
+      const response= await res.json()
+      console.log('respond', response)
+      if(response){
+        console.log(response)
+        if(response.message==="manquantes"){
+            setMessage(response.affiche)
+          }
+          else{
+            if(response.message==="correct"){
+              setTimeout(()=>{
+                setError(false)
+                setMessage('Payment and sharing video succed')
+              }, 4000)
+              
+              router.push("/client/dashboard/sharing-video");
+            } 
+          }
+      } 
     } catch (error) {
       console.error("Erreur lors de l'insertion des données :", error);
-    } 
+    } finally {
+      setError(true)
+      setMessage('')
+    }
     }
 
   const openFacture=()=>{
@@ -70,25 +77,28 @@ const MethodPayment=({data})=>{
     }
 
   const toggleModal = () => {
-    setmessage("")
+    setMessage("")
     setPhoneNumber("")
     setCode("")
      setModePayment("Lumicash")
     setIsOpen(!isOpen);
+    setMontant(data[5])
   };
   const toggleModal2 = () => {
-    setmessage("")
+    setMessage("")
     setPhoneNumber("")
     setCode("")
     setModePayment("Ecocash")
     setIsOpen2(!isOpen2);
+    setMontant(data[5])
   };
   const toggleModal3 = () => {
-    setmessage("")
+    setMessage("")
     setPhoneNumber("")
     setCode("")
     setModePayment("IHELA")
     setIsOpen3(!isOpen3);
+    setMontant(data[5])
   };
   
   const handleChangeMontant = (e) => {
@@ -99,17 +109,17 @@ const MethodPayment=({data})=>{
       
      const formData={
          modepayment,
-         montant:data[0].prixsharing,
+         prix:data[5],
          number:phonenumber,
         code,
-        user:data[0].user
+        user:data[0]
       }
    
-     if(!modepayment|| data[0].prixsharing==0 || !data[0].user|| !phonenumber){
-      setmessage("complétéz tous les champs")
+     if(!modepayment || data[5]==0 || !data[0] || !phonenumber){
+      setMessage("absence of some datas ")
     }
     else{
-      setmessage("")
+      setMessage("")
       const requestOptions = {
   
         method: 'POST',
@@ -120,27 +130,23 @@ const MethodPayment=({data})=>{
       };
       console.log('mode ', requestOptions)
     
-    //   const res = await fetch('/client/api/payment/paye',requestOptions);
-    //   const datas= await res.json()
+      const res = await fetch('/client/api/Dashboard/sharing-video/paye/',requestOptions);
+      const datas= await res.json()
     
-    //   if(res){
-    //     if(datas.message==="manquantes"){
-    //         setmessage(datas.affiche)
-    //       }
-    //       else{
-            
-    //         if(datas.message==="correct"){
-    //             const codepaiement=datas.code
-    //             setPaymentId(codepaiement)
-    //             clickbouttonEnvoyer(codepaiement)
-           
-    //         } 
-    //       }
-    // }
+      if(res){
+        if(datas.message==="manquantes"){
+            setMessage(datas.affiche)
+          } else {
+            if(datas.message==="correct"){
+                const codepaiement=datas.code
+                setPaymentId(codepaiement)
+                clickbouttonEnvoyer(codepaiement)
+            } 
+          }
+    }
    }
   }
   useEffect(()=>{
-
   },[paymentId])
     return (
          <>
@@ -234,14 +240,14 @@ const MethodPayment=({data})=>{
                               {/* Author: FormBold Team */}
                               <div className="mx-auto w-full max-w-[550px] flex justify-center items-center">
                                   <form onSubmit={Payer}>
-                                    {errormessage && <span className="text-red-400 font-bold text-2xl">{errormessage}</span>}
+                                    {message && <span className={`${error ? "text-red-400 font-bold text-2xl" : "text-green-400 font-bold text-2xl"}`}>{message}</span>}
                                    <div className="flex justify-center items-center mb-5">
                                      <img src="/images/lumicash.png" alt="Description de l'image" className="max-w-full h-24 rounded-lg shadow-lg" />
                                    </div>
                                   <div className="space-y-5">
                                   <div className='flex flex-col md:flex-row md:space-x-6'>
                                       <label className='flex flex-row md:flex-col text-white'>Total to pay in FBU</label>
-                                      <input type="text" placeholder="" readOnly value={data[0].prixsharing}  onChange={(e)=>setMontant(e.target.value)}
+                                      <input type="text" placeholder="" readOnly value={montant}  onChange={(e)=>setMontant(e.target.value)}
                                       className="flex flex-row md:flex-col border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                   </div>
                                   <div className='flex flex-col md:flex-row md:space-x-24'>
@@ -296,7 +302,7 @@ const MethodPayment=({data})=>{
                     <div className="flex justify-center items-center pt-10">
                       <div className="max-w-md w-full p-4 rounded-lg shadow-lg">
                         <form onSubmit={Payer}>
-                        {errormessage && <span className="text-red-400 font-bold text-2xl">{errormessage}</span>}
+                        {message && <span className={`${error ? "text-red-400 font-bold text-2xl" : "text-green-400 font-bold text-2xl"}`}>{message}</span>}
                         <div className="flex justify-center items-center mb-5">
                                      <img src="/images/ecocash.png" alt="Description de l'image" className="max-w-full h-24 rounded-lg shadow-lg" />
                                    </div>
@@ -304,7 +310,7 @@ const MethodPayment=({data})=>{
                                   <div className='flex flex-col md:flex-row md:space-x-6'>
                                       <label className='flex flex-row md:flex-col text-white'>Total to pay in FBU</label>
                                       <input type="text" placeholder="" onChange={handleChangeMontant}
-                                      readOnly value={data[0].prixsharing} className="flex flex-row md:flex-col border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                                      readOnly value={montant} className="flex flex-row md:flex-col border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                   </div>
                                   <div className='flex flex-col md:flex-row md:space-x-24'>
                                       <label className='flex flex-row md:flex-col text-white'>Number</label>
@@ -359,7 +365,7 @@ const MethodPayment=({data})=>{
                     <div className="flex justify-center items-center pt-10">
                       <div className="max-w-md w-full p-4 rounded-lg shadow-lg">
                         <form onSubmit={Payer}>
-                        {errormessage && <span className="text-red-400 font-bold text-2xl">{errormessage}</span>}
+                        {message && <span className={`${error ? "text-red-400 font-bold text-2xl" : "text-green-400 font-bold text-2xl"}`}>{message}</span>}
                         <div className="flex justify-center items-center mb-5">
                                      <img src="/images/ihela3.png" alt="Description de l'image" className="max-w-full h-24" />
                                    </div>
@@ -367,7 +373,7 @@ const MethodPayment=({data})=>{
                                   <div className='flex flex-col md:flex-row md:space-x-2'>
                                       <label className='text-white flex flex-row md:flex-col'>Total to pay in FBU</label>
                                       <input type="text" placeholder=""  onChange={handleChangeMontant}
-                                      readOnly value={data[0].prixsharing} className="flex flex-row md:flex-col border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                                      readOnly value={montant} className="flex flex-row md:flex-col border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
                                   </div>
                                   <div className='flex flex-col md:flex-row md:space-x-6'>
                                       <label className='text-white flex flex-row md:flex-col'>Account number</label>

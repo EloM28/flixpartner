@@ -14,6 +14,7 @@ const  ViewCode=({ code })=>{
     const [loading, setLoading] = useState(false);
     const inputField = useRef(null);
     const reg = /^[A-Z0-9\W]+/
+    const reg2 = /\s+/
     
     const handleCopy = () => {
         // Copy the URL to the clipboard
@@ -28,7 +29,17 @@ const  ViewCode=({ code })=>{
       };
     const handleChange = async(e) => {
         e.preventDefault()
-        if (!reg.test(promoCode)) {
+        if (reg2.test(promoCode)){
+            setError(true)
+            setLoading(false)
+            setSuccess("The referral code must not have whitespace, Please try again")
+            const timer = setTimeout(() => {
+                setSuccess('')
+                setError(false)
+            }, 4000)
+
+            return () => clearTimeout(timer)
+        } else if (!reg.test(promoCode)) {
             setError(true)
             setLoading(false)
             setSuccess("The referral code must not have whitespace and must be in UpperCase, Please try again")

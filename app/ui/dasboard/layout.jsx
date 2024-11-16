@@ -10,14 +10,17 @@ const DashClientLayout=()=>{
       setIsDropdownVisible((prevState) => !prevState);
     }
   const Logout=()=>{
-    localStorage.removeItem('token-teramapartrner');
+    localStorage.removeItem('token-tokenpartrner');
     router.push('/client/login');
   }
   return (
 <PubliciteProvider >
    <div className="bg-gray-800 font-sans leading-normal tracking-normal mt-12 ">
     {/*--Nav--*/}
-   <div className="flex flex-col md:flex-row">
+  
+
+
+    <div className="flex flex-col md:flex-row">
    <nav className="bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0">
         <div className="flex">
 
@@ -32,7 +35,7 @@ const DashClientLayout=()=>{
                     <li className="flex-1 md:flex-none md:mr-3">
                         <div className="relative inline-block">
                             <button  onClick={() => toggleDD('myDropdown')} className="drop-button text-white focus:outline-none"> <span className="pr-2"><i className="em em-robot_face"></i></span> Hi, User <svg className="h-3 fill-current inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg></button>
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg></button>
                             <div
                                 id="myDropdown"
                                 className={`dropdownlist absolute bg-gray-800 text-white right-0 mt-3 p-3 overflow-auto z-30 ${

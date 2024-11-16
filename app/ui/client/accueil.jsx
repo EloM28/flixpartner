@@ -1,147 +1,146 @@
 'use client'
 import { useState,useEffect } from "react";
 const  Accueil=()=>{
-  const [contactName, setContactName] = useState("")
-  const [email, setEmail] = useState("")
-  const [textBody, setTextBody] = useState("")
-  const [newsLetter, setNewsLetter ] = useState("")
-  const [contactMessage, setContactMessage] = useState("")
-  const [success, setSuccess] = useState("")
-  const [successContact, setSuccessContact] = useState(false)
-  const [succed, setSucced] = useState(false)
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [loadingContact, setLoadingContact] = useState(false)
-  
-  const slides = [
-      { image: '/images/info1.png', title: 'We can help you develop web and mobile applications' },
-      { image: '/images/phtheb.png', title: 'We can help you with hosting your website' },
-      { image: '/images/pbc.png', title: "You can get benefits with a promo code from affiliates. We can promote your products to increase their visibility. If you don't have a video, we can help you create one. Our large audience ensures that your products will be seen by many people" },
-  ];
-
-  const handleSendContact = async(e) => {
-    e.preventDefault()
-    setLoadingContact(true)
-    try {
-        const requestOptions = {
-        method : 'POST',
-        headers : {
-          "Content-Type" : "application/json",
-        },
-        body : JSON.stringify({
-          email,
-          textBody,
-          contactName,
-        })
-      }
-      const response = await fetch('/api/client/contact', requestOptions)
-      
-      if (response){
-        const data = await response.json();
-        if (data.response.message == 'Success'){
-          setSuccessContact(true)
-          setContactMessage('Message sended')
-          const timer = setTimeout(()=>{
-            setContactMessage('')
-            setSuccessContact(false)
-          }, 4000)
-          return () => clearTimeout(timer)
-        }
-        else{
-          setContactMessage('Message not send, Try again later')
-          const timer = setTimeout(()=>{
-            setContactMessage('')
+    const [contactName, setContactName] = useState("")
+    const [email, setEmail] = useState("")
+    const [textBody, setTextBody] = useState("")
+    const [newsLetter, setNewsLetter ] = useState("")
+    const [contactMessage, setContactMessage] = useState("")
+    const [success, setSuccess] = useState("")
+    const [successContact, setSuccessContact] = useState(false)
+    const [succed, setSucced] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [loadingContact, setLoadingContact] = useState(false)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const slides = [
+        { image: '/images/info1.png', title: 'We can help you develop web and mobile applications' },
+        { image: '/images/phtheb.png', title: 'We can help you with hosting your website' },
+        { image: '/images/pbc.png', title: "You can get benefits with a promo code from affiliates. We can promote your products to increase their visibility. If you don't have a video, we can help you create one. Our large audience ensures that your products will be seen by many people" },
+    ];
+    const handleSendContact = async(e) => {
+      e.preventDefault()
+      setLoadingContact(true)
+      try {
+          const requestOptions = {
+          method : 'POST',
+          headers : {
+            "Content-Type" : "application/json",
           },
-            4000
-          )
-          console.log('error',response)
-          return ()=>clearTimeout(timer)
+          body : JSON.stringify({
+            email,
+            textBody,
+            contactName,
+          })
         }
-      }
-      else{
-        setContactMessage('Mail not sended try again later')
-      }
-    } catch (error) {
-      setContactMessage('Erreur dans l\'envoi ')
-    }
-    finally{
-      setLoadingContact(false)
-      setEmail('')
-      setContactName('')
-      setTextBody('')
-    }
-    
-  }
-
-  const handleClickNewsLetter = async(e)=>{
-    e.preventDefault()
-    if (newsLetter == ''){
-      setSuccess("You must enter your Email")
-      const timer = setTimeout(() => {
-        setSuccess('')
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-    setLoading(true)
-    try {
-      const requestOptions = {
-        method : 'POST',
-        headers : {
-          "Content-Type" : "application/json", 
-        },
-        body : JSON.stringify({
-          newsLetter
-        })
-      }
-      const req = await fetch('/api/client/newsLetter', requestOptions)
-      if (req){
-        const response = await req.json()
-        if (response.message === 'Success'){
-          setSucced(true)
-          setSuccess('You are well saved to the newsLetter')
-          const timer = setTimeout(() => {
-            setSuccess('')
-            setSucced(false)
-          }, 4000);
-          return () => clearTimeout(timer);
-        }
-        else if (response.message != 'Error' && message != 'Success'){
-          setSuccess(response.message)
-          const timer = setTimeout(() => {
-            setSuccess('')
-          }, 4000);
-          return () => clearTimeout(timer);
+        const response = await fetch('/api/client/contact', requestOptions)
+        
+        if (response){
+          const data = await response.json();
+          if (data.response.message == 'Success'){
+            setSuccessContact(true)
+            setContactMessage('Message sended')
+            const timer = setTimeout(()=>{
+              setContactMessage('')
+              setSuccessContact(false)
+            }, 4000)
+            return () => clearTimeout(timer)
+          }
+          else{
+            setContactMessage('Message not send, Try again later')
+            const timer = setTimeout(()=>{
+              setContactMessage('')
+            },
+              4000
+            )
+            console.log('error',response)
+            return ()=>clearTimeout(timer)
+          }
         }
         else{
-          setSuccess('You are not saved to the newsLetter, Please try again later')
-          const timer = setTimeout(() => {
-            setSuccess('')
-          }, 4000);
-          return () => clearTimeout(timer);
+          setContactMessage('Mail not sended try again later')
         }
+      } catch (error) {
+        setContactMessage('Erreur dans l\'envoi ')
       }
-    } catch (error) {
-      const timer = setTimeout(() => {
-        setSuccess("Error in submitting at newsLetter, Please try again later")
-      }, 4000);
-      return () => clearTimeout(timer);
+      finally{
+        setLoadingContact(false)
+        setEmail('')
+        setContactName('')
+        setTextBody('')
+      }
+      
     }
-    finally{
-      setLoading(false)
+  
+    const handleClickNewsLetter = async(e)=>{
+      e.preventDefault()
+      if (newsLetter == ''){
+        setSuccess("You must enter your Email")
+        const timer = setTimeout(() => {
+          setSuccess('')
+        }, 4000);
+        return () => clearTimeout(timer);
+      }
+      setLoading(true)
+      try {
+        const requestOptions = {
+          method : 'POST',
+          headers : {
+            "Content-Type" : "application/json", 
+          },
+          body : JSON.stringify({
+            newsLetter
+          })
+        }
+        const req = await fetch('/api/client/newsLetter', requestOptions)
+        if (req){
+          const response = await req.json()
+          if (response.message === 'Success'){
+            setSucced(true)
+            setSuccess('You are well saved to the newsLetter')
+            const timer = setTimeout(() => {
+              setSuccess('')
+              setSucced(false)
+            }, 4000);
+            return () => clearTimeout(timer);
+          }
+          else if (response.message != 'Error' && message != 'Success'){
+            setSuccess(response.message)
+            const timer = setTimeout(() => {
+              setSuccess('')
+            }, 4000);
+            return () => clearTimeout(timer);
+          }
+          else{
+            setSuccess('You are not saved to the newsLetter, Please try again later')
+            const timer = setTimeout(() => {
+              setSuccess('')
+            }, 4000);
+            return () => clearTimeout(timer);
+          }
+        }
+      } catch (error) {
+        const timer = setTimeout(() => {
+          setSuccess("Error in submitting at newsLetter, Please try again later")
+        }, 4000);
+        return () => clearTimeout(timer);
+      }
+      finally{
+        setLoading(false)
+      }
     }
-  }
+
+  useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+        }, 5000); // Changer de slide toutes les 5 secondes
+
+        return () => clearInterval(interval); // Nettoyage de l'intervalle lors du démontage
+    }, [slides.length]);
+
   const handleClick = () => {
     const menu = document.getElementById('services-menu');
     menu.classList.toggle('active');
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000); // Changer de slide toutes les 5 secondes
-
-    return () => clearInterval(interval); // Nettoyage de l'intervalle lors du démontage
-  }, [slides.length]);
 
   useEffect(() => {
     const button = document.getElementById('services-btn');
@@ -153,10 +152,7 @@ const  Accueil=()=>{
   }, []);
 
   return (
-    <div
-  className="relative w-[100%] h-screen" 
->
-
+    <div className="relative w-[100%] h-screen" >
     <nav className="flex items-center justify-between flex-wrap md:flex-nowrap bg-white p-4">
         <div className="flex md:ml-10 lg:ml-20">
         <a href="/"><img src="/images/TeramaFlixpic.ico" alt="Logo" className="h-14 mr-4"/></a>
@@ -301,10 +297,7 @@ const  Accueil=()=>{
                               Promo Code
                             </h6>
                             <p className="mb-4 text-gray-500">
-                              When you get a promo code, you can enjoy several benefits from affiliates.
-                              <span className="text-blue-500">
-                                <a href="/client/login">Get promo code.</a>
-                              </span>
+                              When you get a promo code, you can enjoy several benefits from affiliates. <span className="text-blue-500"><a href="">Get promo code.</a></span>
                             </p>
                           </div>
                         </div>
@@ -317,10 +310,7 @@ const  Accueil=()=>{
                               Product publication
                             </h6>
                             <p className="mb-4 text-gray-500">
-                              We can highlight your products to increase their visibility and make them known to a wide audience.
-                              <span className="text-blue-500">
-                                <a href="/client/login">Publish a product.</a>
-                              </span>
+                              We can highlight your products to increase their visibility and make them known to a wide audience. <span className="text-blue-500"><a href="">Publish a product.</a></span>
                             </p>
                           </div>
                         </div>
@@ -333,10 +323,7 @@ const  Accueil=()=>{
                             </div>
                             <h6 className="text-xl mb-1 font-semibold">Video editing</h6>
                             <p className="mb-4 text-gray-500">
-                              If you don't have a video, we can help you edit it. 
-                              <span className="text-blue-500">
-                                <a href="/client/login">Click here to make the montage.</a>
-                              </span>
+                              If you don't have a video, we can help you edit it. <span className="text-blue-500"><a href="">Click here to make the montage.</a></span>
                             </p>
                           </div>
                         </div>
@@ -404,10 +391,7 @@ const  Accueil=()=>{
                               Web application development
                             </h6>
                             <p className="mb-4 text-gray-500">
-                              We can help you develop web applications. 
-                              <span className="text-blue-500">
-                                <a href="/client/login">Click here.</a>
-                              </span>
+                              We can help you develop web applications. <span className="text-blue-500"><a href="">Click here.</a></span>
                             </p>
                           </div>
                         </div>
@@ -420,10 +404,7 @@ const  Accueil=()=>{
                             </div>
                             <h6 className="text-xl mb-1 font-semibold">Mobile application development</h6>
                             <p className="mb-4 text-gray-500">
-                              We can help you develop mobile applications. 
-                              <span className="text-blue-500">
-                                <a href="/client/login">Click here.</a>
-                              </span>
+                              We can help you develop mobile applications. <span className="text-blue-500"><a href="">Click here.</a></span>
                             </p>
                           </div>
                         </div>
@@ -498,7 +479,7 @@ const  Accueil=()=>{
               <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/developpeur3.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/developpeur3.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>BIZINDAVYI Leonce</span>
@@ -508,7 +489,7 @@ const  Accueil=()=>{
                 </div>
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/Gashimwe.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/Gashimwe.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>GASHIMWE Aimee Emelyne</span>
@@ -521,7 +502,7 @@ const  Accueil=()=>{
                 <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/JMV.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/JMV.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NDAYIRAGIJE Jean Marie Vianne</span>
@@ -531,7 +512,7 @@ const  Accueil=()=>{
                 </div>
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/developpeur2.webp' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/developpeur2.webp' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>GAKIZA Eddy Brave</span>
@@ -546,7 +527,7 @@ const  Accueil=()=>{
               <div className="w-full space-y-5 md:space-y-0 md:flex md:space-x-5">
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/Eric.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/Eric.jpg' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NDUWAYO Eric</span>
@@ -556,7 +537,7 @@ const  Accueil=()=>{
                 </div>
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/developper1.jfif' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/developper1.jfif' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>MUGISHA Eloge</span>
@@ -570,7 +551,7 @@ const  Accueil=()=>{
      
                 <div data-aos="fade-right" className='w-full md:w-1/2 cursor-pointer h-[34rem] md:h-[51rem] lg:h-[31rem] rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md border-2 border-blue-500'>
                     <div className='w-full h-[85%] lg:h-[80%] border'>
-                        <img  src='Images/Emma.png' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
+                        <img  src='images/EmmyPicture.png' alt='chef1' title='directeur général'  className='w-full h-full object-cover rounded-tl-md rounded-tr-md'/>
                     </div>
                     <div className='flex flex-col space-y-1   w-full h-[11.5%] lg:h-[18%] justify-center place-items-center'>
                         <span className='text-sm md:text-lg font-bold text-blue-500 mt-4 md:mt-0'>NIYONGABO Emmanuel</span>
@@ -580,12 +561,15 @@ const  Accueil=()=>{
                 </div>
                 </div>              
             </div>
+
+            
             </div>
+        
         </div>
     </section>
 
 
-<section id="contact" className="p-6">
+  <section id="contact" className="p-6">
     <div className="flex justify-center items-center">
         <div className="max-w-md w-full bg-blue-400 p-4 rounded-lg shadow-lg" id="signup">
             <h2 className="text-2xl font-bold mb-6 text-center text-white">Contact Us</h2>
@@ -610,106 +594,104 @@ const  Accueil=()=>{
             </form>
           </div>
         </div>
-     
+  </section> 
 
-</section> 
-    <footer className="md:px-40 lg:px-2 backdrop-blur-2xl rounded border border-blue-700 text-white mt-10 p-4 2xl:px-24">
-        <div className="space-y-7 md:space-y-0 md:flex lg:space-x-12 xl:space-x-36">
-            <div className="space-y-7 lg:space-y-0 lg:flex lg:space-x-12 xl:space-x-36">
-           
-            <div>
-                <img src="/images/TeramaFlixpic.ico" alt="Photo" className="w-[75%] " />
-            </div>
-            
-         
-            <div>
-                <h3 className="font-bold mb-4">Menus</h3>
-                <ul>
-                    <li><input type="checkbox" /> Accueil</li>
-                    <li><input type="checkbox"/> About Us</li>
-                    <li><input type="checkbox"/> Services</li>
-                    <li><input type="checkbox"/> Contact</li>
-                </ul>
-            </div>
-            </div>
-            
-            <div className="space-y-7 md:space-y-8 lg:space-y-0 lg:flex lg:space-x-12 xl:space-x-28">
-            <div>
-                <h3 className="font-bold mb-4">Address</h3>
-                <div className="space-y-4 mb-8">
-                  <div className="flex space-x-2">
-                    <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    <p>Burundi, Bujumbura</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                    <p>+257 71174167</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                    <p>teramaflix@gmail.com</p>
-                  </div>
+  <footer className="md:px-40 lg:px-2 backdrop-blur-2xl rounded border border-blue-700 text-white mt-10 p-4 2xl:px-24">
+      <div className="space-y-7 md:space-y-0 md:flex lg:space-x-12 xl:space-x-36">
+          <div className="space-y-7 lg:space-y-0 lg:flex lg:space-x-12 xl:space-x-36">
+          
+          <div>
+              <img src="/images/TeramaFlixpic.ico" alt="Photo" className="w-[75%] " />
+          </div>
+          
+        
+          <div>
+              <h3 className="font-bold mb-4">Menus</h3>
+              <ul>
+                  <li><input type="checkbox" /> Accueil</li>
+                  <li><input type="checkbox"/> About Us</li>
+                  <li><input type="checkbox"/> Services</li>
+                  <li><input type="checkbox"/> Contact</li>
+              </ul>
+          </div>
+          </div>
+          
+          <div className="space-y-7 md:space-y-8 lg:space-y-0 lg:flex lg:space-x-12 xl:space-x-28">
+          <div>
+              <h3 className="font-bold mb-4">Address</h3>
+              <div className="space-y-4 mb-8">
+                <div className="flex space-x-2">
+                  <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <p>Burundi, Bujumbura</p>
                 </div>
-                
-                <div className="flex space-x-5">
-            
-                  <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 320 512">
+                <div className="flex space-x-2">
+                  <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <p>+257 71174167</p>
+                </div>
+                <div className="flex space-x-2">
+                  <svg className="h-6 w-6 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                  <p>teramaflix@gmail.com</p>
+                </div>
+              </div>
+              
+              <div className="flex space-x-5">
+          
+                <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 320 512">
 
-                      <path
-                        d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
-                    </svg>
-                  </span>
-    
-                  <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 448 512">
-                     
-                      <path
-                        d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
-                    </svg>
-                  </span>
-    
-
-                  <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 576 512">
+                    <path
+                      d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
+                  </svg>
+                </span>
+  
+                <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 448 512">
                     
-                      <path
-                        d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z" />
-                    </svg>
-                  </span>
-    
-                
-                  <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 448 512">
-                     
-                      <path
-                        d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
-                    </svg>
-                  </span>
-                </div>
-            </div>
-            
-           
-            <div>
+                    <path
+                      d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                  </svg>
+                </span>
+  
+
+                <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 576 512">
+                  
+                    <path
+                      d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z" />
+                  </svg>
+                </span>
+  
+              
+                <span className="border border-white p-2 rounded [&>svg]:h-5 [&>svg]:w-5 cursor-pointer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 448 512">
+                    
+                    <path
+                      d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+                  </svg>
+                </span>
+              </div>
+          </div>
+          
+          <div>
                 <h3 className="font-bold">Newsletter</h3>
                 <div className="flex">
                   <form>
@@ -727,8 +709,8 @@ const  Accueil=()=>{
                   </form>
                 </div>
             </div>
-            </div>
-        </div>
+          </div>
+      </div>
     </footer>
     </div>
   );

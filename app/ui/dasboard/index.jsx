@@ -3,7 +3,7 @@
 
 import { useEffect,useState,useRef } from "react";
 import { useContext } from "react";
-import { SessionContext } from "../context/auth";
+import { SessionContext } from "../../ui/context/auth";
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -25,14 +25,6 @@ const  ClientDashBoard=()=>{
       
        try{
 
-        const requestOptions = {
-      
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id_user:sessions})
-          };  
           const chartData = {
       
             method: 'POST',
@@ -41,27 +33,16 @@ const  ClientDashBoard=()=>{
             },
             body: JSON.stringify({id_user:sessions})
           };  
-      const res = await fetch('/api/publicite/Dashboard',requestOptions);
-      const datacharts = await fetch('/api/publicite/Dashboard/chart',chartData);
+      const datacount = await fetch('/client/api/Dashboard',chartData);
+      const datacharts = await fetch('/client/api/Dashboard/chart',chartData);
       const chart=await datacharts.json();
-      //const chart= await fetch('/api/publicite/Dashboard',{method:"GET"});
-         const datas=await res.json()
-         //const chartdata=await chart.json();
-        // console.log(datas);
-        if(chart){
+      const count=await datacount.json();
+        if(chart && count){
           setchartData(chart.data);
           setchartDay(chart.day);
+          setNombrePub(count.nbrepub)
+          setNombrePubenCour(count.nbrepubencour)
         }
-         if(!datas.error){
-          console.log(datas['count']);
-           
-            setStatus("en cour")
-            setDonnes(datas.publicite); 
-          setNombrePub(datas.nbrepub)
-          setNombrePubenCour(datas.nbrepubencour)
-          
-         
-         }
          
        }
        catch(error){
@@ -193,45 +174,7 @@ const  ClientDashBoard=()=>{
  </div>
 <div>
                 
-                <div className="w-full md:w-500 xl:w-600 p-6">
-                   {/* <!--Table Card--> */}
-                    <div className="bg-white border-transparent rounded-lg shadow-xl">
-                        <div className="bg-gradient-to-b from-gray-300 to-gray-100 uppercase text-gray-800 border-b-2 border-gray-300 rounded-tl-lg rounded-tr-lg p-2">
-                            <h5 className="font-bold uppercase text-gray-600">List of videos</h5>
-                        </div>
-                        <div className="p-5 overflow-x-auto">
-                            <table className="w-full p-5 text-gray-700">
-                                <thead>
-                                    <tr>
-                                       <th>#</th>
-                                        <th className="text-left text-blue-900">video name</th>
-                                        <th className="text-left text-blue-900">start date</th>
-                                        <th className="text-left text-blue-900">end date</th>
-                                        <th className="text-left text-blue-900">status</th>
-                                    </tr>
-                                </thead>
-                          {donnes.map((data)=>(
-                                <tbody>
-                                    <tr>
-                                        <td>{i++}</td>
-                                        <td>{data.publicite}</td>
-                                        <td>{data.datedebut}</td>
-                                        <td>{data.datefin}</td>
-                                        {data.status===1 && <td>In progress</td>}
-                                        {data.status===0 && <td>finished</td>}
-                                    </tr>
-
-                                </tbody>
-                                ))}
-                            </table>
-
-                            <p className="py-2"><a href="#">See More issues...</a></p>
-
-                        </div>
-                    </div>
-                    {/*<!--/table Card-->/*/}
-                </div>
-
+                
                 
 
 

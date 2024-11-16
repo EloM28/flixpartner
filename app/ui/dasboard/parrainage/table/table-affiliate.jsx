@@ -18,6 +18,9 @@ const AffiliateTable = ({
       setDisplayMoDetail(false);
     }
   };
+  const AfficherModalClient = (action) => {
+    setDisplayMoDetail(true);
+  };
   useEffect(() => {
     if (displayMoDetail) {
       document.addEventListener("mousedown", handleClickOutside);
@@ -29,10 +32,6 @@ const AffiliateTable = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [displayMoDetail]);
-  const AfficherModalClient = (action) => {
-    setDisplayMoDetail(true);
-  };
-
 
   return (
     <>

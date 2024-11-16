@@ -10,15 +10,26 @@ function PromoCode() {
     const [error, setError] = useState(false)
     const [copy, setCopy] = useState(false)    
     const reg = /^[A-Z0-9\W]+/
+    const reg2 = /\s+/
 
     const handleSendCode = async(e) =>{
         if (promoCode){
             e.preventDefault()
             setLoading(true)
-            if (!reg.test(promoCode)) {
+            if (reg2.test(promoCode)){
                 setError(true)
                 setLoading(false)
-                setSuccess("The referral code must not have whitespace and must be in UpperCase, Please try again")
+                setSuccess("The referral code must not have whitespace, Please try again")
+                const timer = setTimeout(() => {
+                    setSuccess('')
+                    setError(false)
+                }, 4000)
+
+                return () => clearTimeout(timer)
+            } else if (!reg.test(promoCode)) {
+                setError(true)
+                setLoading(false)
+                setSuccess("The referral code must be in UpperCase, Please try again")
                 const timer = setTimeout(() => {
                     setSuccess('')
                     setError(false)
@@ -52,7 +63,7 @@ function PromoCode() {
                         return () => clearTimeout(timer)
                     } else if (response.message == 'errorCode') {
                         setError(true)
-                        setSuccess('Referral code already exist')
+                        setSuccess('Referral code already exist or you have already a referral code')
                         const timer = setTimeout(()=>{
                             setSuccess('')
                             setError(false)

@@ -1,6 +1,31 @@
-import React from 'react'
+'use client'
+import React, { useState, useContext, useEffect } from 'react'
+import { SessionContext } from '../../context/auth'
 
 const SharingVideoTable = () => {
+    const session = useContext(SessionContext)
+    const [datas, setDatas] = useState([])
+    useEffect(()=>{
+        async function fetchDatas(){
+            try {
+                const user = session.session?.user
+                const res = await fetch('/client/api/Dashboard/sharing-video', {
+                    headers : {
+                        user : user
+                    }
+                })
+                const response = await res.json()
+                if (response) {
+                    setDatas(response.datas)
+                } else {
+                    console.log('Data not found')
+                }
+            } catch (error) {
+                console.log('Error server', error)
+            }
+        }
+        fetchDatas()
+    }, [session])
   return (
     <div>
       <div>
@@ -28,15 +53,19 @@ const SharingVideoTable = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td className="py-4 px-6"></td>
-                            <td className="py-4 px-6"></td>
-                            <td className="py-4 px-6"></td>
-                            <td className="py-4 px-6"></td>
-                            <td className="py-4 px-6"></td>
-                            
-                        </tr>
+                        {datas && 
+                        datas.map((item, index) => (
+                            <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td className="py-4 px-6">{index + 1}</td> 
+                                <td className="py-4 px-6">{item.title}</td>
+                                <td className="py-4 px-6">{item.days}</td>
+                                <td className="py-4 px-6">{item.price}</td>
+                                <td className="py-4 px-6">pending</td> 
+                            </tr>
+                        )    
+                       
+                    ) 
+                    }
                         </tbody>
                     </table>
                     </div>
