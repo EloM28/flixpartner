@@ -11,42 +11,40 @@ function ChangePass() {
   const [sended, setSended] = useState(false)
   const router = useRouter()
   const sendLink = async () => {
-    // if (email !== "") {
-    //   const addData = {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       mail: email
-    //     })
-    //   };
-    //   setErrMail('')
-    //   const res = await fetch(`/api/changePass`, addData);
-    //   const response = await res.json();
+    if (email !== "") {
+      const addData = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mail: email
+        })
+      };
+      setErrMail('')
+      const res = await fetch(`/client/api/forgot-password`, addData);
+      const response = await res.json();
 
-    //   console.log("mess:", response.response);
-    //   if (response.response.message !== "success") {
-    //     if (response.response.message == "validationError") {
-    //       response.response.data.issues.map(err => {
-    //         if (err.path == 'userMail') setErrMail(err.message)
-    //       })
-    //     }
-    //     if (response.response.data == "errorMail") {
-    //       setErrMail(response.response.error)
-    //     }
-    //     return;
-    //   } else {
-    //     setSended(true)
-    //     console.log("inside");
-    //     router.push('/waitchngpass')
-    //   }
-
-
-    // }
-    // else {
-    //   setErrMail("The mail must be completed")
-    // }
+      console.log("mess:", response.response);
+      if (response.response.message !== "success") {
+        if (response.response.message == "validationError") {
+          response.response.data.issues.map(err => {
+            if (err.path == 'userMail') setErrMail(err.message)
+          })
+        }
+        if (response.response.data == "errorMail") {
+          setErrMail(response.response.error)
+        }
+        return;
+      } else {
+        setSended(true)
+        console.log("inside");
+        router.push('/waitchngpass')
+      }
+    }
+    else {
+      setErrMail("The mail must be completed")
+    }
   }
   return (
     <>
