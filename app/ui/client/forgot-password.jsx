@@ -75,7 +75,7 @@ function ChangePass() {
                   </div>
                 </div>
                 <div className="pt-6 text-base leading-6  sm:text-sm sm:leading-7">
-                  <p>Return to   <Link href={routerLinks.login} className="text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">Log in !</Link></p>
+                  {/* <p>Return to   <Link href={routerLinks.login} className="text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">Log in !</Link></p> */}
                 </div>
               </div>
             </div>
