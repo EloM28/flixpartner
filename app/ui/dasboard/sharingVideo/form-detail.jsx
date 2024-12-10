@@ -95,8 +95,7 @@ const FormDetail = (data) => {
             setErrormessage("commplété tous les champs")
          // setData(data);
             setActiveFacture(0);
-      } 
-    
+      }  
   }; 
 
   useEffect(() => {
